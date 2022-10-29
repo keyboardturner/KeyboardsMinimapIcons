@@ -4,18 +4,21 @@ local defaultsTable = {"Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\Keyboards
 }
 
 local kmiFrame = CreateFrame("Frame", "KeyboardsMinimapIconsFrame");
+kmiFrame:RegisterEvent("ADDON_LOADED");
 
-function kmiFrame.eventHandler(self,event,...)
-	Minimap:SetBlipTexture("Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\KeyboardsMinimapIcons");
-	if not KMI_DB then
-		KMI_DB = defaultsTable;
-	else
-		Minimap:SetBlipTexture(KMI_DB);
+function kmiFrame.eventHandler(self, event, arg1)
+	--Minimap:SetBlipTexture("Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\KeyboardsMinimapIcons");
+	if event == "ADDON_LOADED" and arg1 == "KeyboardsMinimapIcons" then
+		if not KMI_DB then
+			KMI_DB = defaultsTable;
+		else
+			Minimap:SetBlipTexture(KMI_DB);
+		end
 	end
 end
 
-kmiFrame:RegisterEvent("PLAYER_ENTERING_WORLD");
 kmiFrame:SetScript("OnEvent",kmiFrame.eventHandler);
+
 
 kmiFrame.coloredText = "|caa2788e3KMI|r"
 kmiFrame.coloredTextVerbose = "|caa2788e3Keyboard's Minimap Icons|r"
