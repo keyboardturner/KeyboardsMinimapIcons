@@ -1,7 +1,7 @@
 ## Interface: 100000
 ## Title: Keyboard's Minimap Icons
 ## Author: Keyboardturner
-## Version: 0.1.1
+## Version: 0.1.2
 ## Notes: Better Icons for the Minimap.
 ## SavedVariables: KMI_DB
 
