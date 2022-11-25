@@ -1,7 +1,6 @@
 local _dummy, kmiFrame = ...; -- handles slash commands
 
-local defaultsTable = {"Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\KeyboardsMinimapIcons",
-}
+local defaults = "Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\KeyboardsMinimapIcons"
 
 local kmiFrame = CreateFrame("Frame", "KeyboardsMinimapIconsFrame");
 kmiFrame:RegisterEvent("ADDON_LOADED");
@@ -10,8 +9,9 @@ kmiFrame:RegisterEvent("PLAYER_LOGOUT");
 function kmiFrame.eventHandler(self, event, arg1)
 	--Minimap:SetBlipTexture("Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\KeyboardsMinimapIcons");
 	if event == "ADDON_LOADED" and arg1 == "KeyboardsMinimapIcons" then
-		if not KMI_DB then
-			KMI_DB = defaultsTable;
+		if not KMI_DB or type(KMI_DB) == "table" then 
+			KMI_DB = defaults;
+			Minimap:SetBlipTexture(KMI_DB);
 		else
 			Minimap:SetBlipTexture(KMI_DB);
 		end
@@ -35,7 +35,7 @@ end
 
 kmiFrame.commands = {
 	["enable"] = function()
-		Minimap:SetBlipTexture(KMI_DB[1]);
+		Minimap:SetBlipTexture(KMI_DB);
 		kmiFrame:Print("Enabling " .. kmiFrame.coloredTextVerbose .. ".");
 	end,
 
