@@ -1,0 +1,7 @@
+## Interface: 30400
+## Title: Keyboard's Minimap Icons
+## Author: Keyboardturner
+## Version: 0.1.4
+## Notes: Better Icons for the Minimap.
+
+KeyboardsMinimapIcons_Vanilla.lua
