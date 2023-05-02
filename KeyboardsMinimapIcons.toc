@@ -1,8 +1,9 @@
-## Interface: 100007
+## Interface: 100100
 ## Title: Keyboard's Minimap Icons
 ## Author: Keyboardturner
-## Version: 0.1.6
+## Version: 0.1.7
 ## Notes: Better Icons for the Minimap.
+## IconTexture: Interface/Addons/KeyboardsMinimapIcons/KeyboardsMinimapIcons.blp
 ## SavedVariables: KMI_DB
 
 KeyboardsMinimapIcons.lua
