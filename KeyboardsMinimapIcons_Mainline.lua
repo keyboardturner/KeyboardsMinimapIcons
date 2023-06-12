@@ -5,6 +5,28 @@ local defaults = "Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\KeyboardsMinima
 local kmiFrame = CreateFrame("Frame", "KeyboardsMinimapIconsFrame");
 kmiFrame:RegisterEvent("ADDON_LOADED");
 kmiFrame:RegisterEvent("PLAYER_LOGOUT");
+kmiFrame:RegisterEvent("PLAYER_ENTERING_WORLD");
+
+kmiFrame.coloredText = "|caa2788e3KMI|r"
+kmiFrame.coloredTextVerbose = "|caa2788e3Keyboard's Minimap Icons|r"
+
+StaticPopupDialogs["KMI_ADDON_INCOMPATIBLE"] = {
+	text = kmiFrame.coloredText .. ": You appear to be running an incompatible addon: |caaf5e042Derangement's Minimap Blips|r. This addon is no longer available for updates. Would you like to reload your UI and disable it?",
+	button1 = "Yes",
+	button2 = "No",
+	OnAccept = function()
+		if UnitAffectingCombat("player") == true then
+			print(ERR_NOT_IN_COMBAT);
+			return
+		else
+			DisableAddOn("DerangementMinimapBlips")
+			ReloadUI()
+		end
+ 	end,
+	timeout = 0,
+	whileDead = true,
+	hideOnEscape = true,
+};
 
 function kmiFrame.eventHandler(self, event, arg1)
 	--Minimap:SetBlipTexture("Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\KeyboardsMinimapIcons");
@@ -16,16 +38,15 @@ function kmiFrame.eventHandler(self, event, arg1)
 			Minimap:SetBlipTexture(KMI_DB);
 		end
 	end
+	if event == "PLAYER_ENTERING_WORLD" and IsAddOnLoaded("DerangementMinimapBlips") == true then
+		StaticPopup_Show("KMI_ADDON_INCOMPATIBLE")
+	end
 	if event == "PLAYER_LOGOUT" then
 		Minimap:SetBlipTexture("Interface\\MINIMAP\\ObjectIconsAtlas");
 	end
 end
 
 kmiFrame:SetScript("OnEvent",kmiFrame.eventHandler);
-
-
-kmiFrame.coloredText = "|caa2788e3KMI|r"
-kmiFrame.coloredTextVerbose = "|caa2788e3Keyboard's Minimap Icons|r"
 
 
 function kmiFrame:Print(...)
