@@ -2,6 +2,9 @@
 Personal tweaks for minimap icons
 
 <p>I made this as a continuation upon <a href="https://www.curseforge.com/wow/addons/derangement-minimapblips">DerangementMinimapBlips</a>, but to my own preference. It shrinks down friendly NPC/Player targets for minimap icons on purpose because I find them to be a much lower priority. This distinguishes them from enemy targets better, allowing you to more easily sift through many enemies that may be clustered in an area. This is especially useful for hunters, where Track Humanoids in particular can make the minimap so cluttered that you might as well otherwise disable it. Because it's a texture replacement addon, it <em>should</em> be compatible with every other addon with exception to another texture replacement addon like aforementioned DerangementMinimapBlips. Like the previous addon, it also makes gathering nodes into a silver colour to distinguish from neutral players/NPCs. Unlike the previous addon, I've actually switched the icon for player / NPCs so that player icons have a gold ring around them. I felt this gives a better indication that player characters are unique.</p>
+
+A link to my discord for addon projects and other things can be found [here](https://discord.gg/tA4rrmjPp8).
+
 <p><br />Also best used / recommended in conjunction with <a href="https://www.curseforge.com/wow/addons/farmhud">FarmHud</a>.</p>
 <p>&nbsp;</p>
 <p><strong>Options</strong></p>
