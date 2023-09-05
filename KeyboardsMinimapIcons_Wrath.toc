@@ -1,7 +1,7 @@
 ## Interface: 30402
 ## Title: Keyboard's Minimap Icons
 ## Author: Keyboardturner
-## Version: 0.1.9
+## Version: 0.2.0
 ## Notes: Better Icons for the Minimap.
 ## IconTexture: Interface/Addons/KeyboardsMinimapIcons/KeyboardsMinimapIcons.blp
 ## SavedVariables: KMI_DB
