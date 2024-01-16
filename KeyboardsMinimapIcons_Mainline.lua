@@ -68,23 +68,41 @@ kmiFrame.commands = {
 	["default"] = function()
 		Minimap:SetBlipTexture("Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\KeyboardsMinimapIcons");
 		KMI_DB = "Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\KeyboardsMinimapIcons";
-		kmiFrame:Print("Enabling " .. "|caaf5e042" .. "default" .. "|r" .. " option.");
+		kmiFrame:Print("Enabling " .. "|caaf5e042" .. "default" .. "|r" .. " option. This option only includes smaller friendly player/NPC tracking nodes.");
 	end,
 
-	["circle"] = function()
-		Minimap:SetBlipTexture("Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\NodesAsCircles");
-		KMI_DB = "Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\NodesAsCircles";
-		kmiFrame:Print("Enabling " .. "|caaf5e042" .. "circle" .. "|r" .. " option.");
+	["circle"] = function(subCommand)
+		if not subCommand or subCommand == "" then
+			Minimap:SetBlipTexture("Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\NodesAsCircles");
+			KMI_DB = "Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\NodesAsCircles";
+			kmiFrame:Print("Enabling " .. "|caaf5e042" .. "circle" .. "|r" .. " option. This option only includes smaller friendly player/NPC tracking nodes, and blue circles for gathering nodes.");
+		elseif subCommand == "shiny" then
+			Minimap:SetBlipTexture("Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\NodesAsCircles_ShinyG");
+			KMI_DB = "Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\NodesAsCircles_ShinyG";
+			kmiFrame:Print("Enabling " .. "|caaf5e042" .. "circle shiny" .. "|r" .. " option. This option includes smaller friendly player/NPC tracking nodes, blue circles for gathering nodes, and golden shiny icons for special gathering nodes.");
+		else
+			kmiFrame:Print("Invalid sub-command for " .. "|caaf5e042" .. "/kmi circle" .. "|r" .. ". Use the " .. "|caaf5e042" .. "/kmi circle shiny" .. "|r" .. " or " .. "|caaf5e042" .. "/kmi circle" .. "|r" .. " commands.");
+		end
 	end,
 
-	["blue"] = function()
-		Minimap:SetBlipTexture("Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\BlueNodes");
-		KMI_DB = "Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\BlueNodes";
-		kmiFrame:Print("Enabling " .. "|caaf5e042" .. "blue" .. "|r" .. " option.");
+	["blue"] = function(subCommand)
+		if not subCommand or subCommand == "" then
+			Minimap:SetBlipTexture("Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\BlueNodes");
+			KMI_DB = "Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\BlueNodes";
+			kmiFrame:Print("Enabling " .. "|caaf5e042" .. "blue" .. "|r" .. " option. This option only includes smaller friendly player/NPC tracking nodes, and blue color for gathering nodes.");
+		elseif subCommand == "shiny" then
+			Minimap:SetBlipTexture("Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\BlueNodes_ShinyG");
+			KMI_DB = "Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\BlueNodes_ShinyG";
+			kmiFrame:Print("Enabling " .. "|caaf5e042" .. "blue shiny" .. "|r" .. " option. This option includes smaller friendly player/NPC tracking nodes, blue color for gathering nodes, and golden shiny icons for special gathering nodes.");
+		else
+			kmiFrame:Print("Invalid sub-command for " .. "|caaf5e042" .. "/kmi blue" .. "|r" .. ". Use the " .. "|caaf5e042" .. "/kmi blue shiny" .. "|r" .. " or " .. "|caaf5e042" .. "/kmi blue" .. "|r" .. " commands.");
+		end
 	end,
 
 	["help"] = function()
-		kmiFrame:Print("Thank you for using " .. kmiFrame.coloredTextVerbose .. ". This addon replaces the default minimap icons, particularly for Hunter Tracking as well as coloring gathering nodes blue.\nCommands available: " .. "|caaf5e042" .. "/kmi disable" .. "|r" .. " | " .. "|caaf5e042" .. "/kmi enable" .. "|r" .. " | " .. "|caaf5e042" .. "/kmi default" .. "|r" .. " | " .. "|caaf5e042" .. "/kmi circle" .. "|r" .. " | " .. "|caaf5e042" .. "/kmi blue" .. "|r" .. ".")
+		kmiFrame:Print("Thank you for using " .. kmiFrame.coloredTextVerbose .. ". This addon replaces the default minimap icons, particularly for Hunter Tracking as well as coloring gathering nodes blue."..
+			"\nCommands available: " .. "|caaf5e042" .. "/kmi disable" .. "|r" .. " | " .. "|caaf5e042" .. "/kmi enable" .. "|r" .. " | " .. "|caaf5e042" .. "/kmi default" .. "|r" .. " | " .. "|caaf5e042" .. "/kmi circle" .. "|r" .. " | " .. "|caaf5e042" .. "/kmi blue" .. "|r" .. "."..
+			"\nAdditional sub-commands: " .. "|caaf5e042" .. "/kmi circle shiny" .. "|r" .. " | " .. "|caaf5e042" .. "/kmi blue shiny" .. "|r"..".")
 	end
 };
 
