@@ -1,3 +1,7 @@
+# 0.2.4
+
+update texture to 10.2.7, toc bump
+
 # 0.2.3
 
 toc bump to 10.2.6
