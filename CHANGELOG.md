@@ -1,3 +1,11 @@
+# 0.2.6
+
+Quick fix to 10.2.7 textures
+
+# 0.2.5
+
+fix Cata suffix
+
 # 0.2.4
 
 update texture to 10.2.7, toc bump
