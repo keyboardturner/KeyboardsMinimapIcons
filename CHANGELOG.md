@@ -1,3 +1,7 @@
+# 0.2.7
+
+TOC and texture updates for TWW
+
 # 0.2.6
 
 Quick fix to 10.2.7 textures
