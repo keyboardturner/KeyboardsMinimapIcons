@@ -1,3 +1,7 @@
+# 0.2.8
+
+Texture fix for 11.0.2
+
 # 0.2.7
 
 TOC and texture updates for TWW
