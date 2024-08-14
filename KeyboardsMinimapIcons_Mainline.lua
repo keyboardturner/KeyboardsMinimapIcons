@@ -1,25 +1,68 @@
-local _dummy, kmiFrame = ...; -- handles slash commands
+local _, L = ...
 
-local defaults = "Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\KeyboardsMinimapIcons"
+local KMItextures = {
+	default = {
+		textureNum = 1,
+		textureName = "Default",
+		texture = "Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\KeyboardsMinimapIcons",
+	},
+	NodesAsCircles = {
+		textureNum = 2,
+		textureName = "Circles",
+		texture = "Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\NodesAsCircles",
+	},
+	NodesAsCirclesSG = {
+		textureNum = 3,
+		textureName = "Circles Shiny",
+		texture = "Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\NodesAsCircles_ShinyG",
+	},
+	BlueNodes = {
+		textureNum = 4,
+		textureName = "Blue",
+		texture = "Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\BlueNodes",
+	},
+	BlueNodesSG = {
+		textureNum = 5,
+		textureName = "Blue Shiny",
+		texture = "Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\BlueNodes_ShinyG",
+	},
+	GameDefault = {
+		textureNum = 6,
+		textureName = "Game Default",
+		texture = "Interface\\MINIMAP\\ObjectIconsAtlas",
+	},
+
+};
+
+local defaultsTable = {
+	texture = KMItextures.default.textureNum
+};
+
+
 
 local kmiFrame = CreateFrame("Frame", "KeyboardsMinimapIconsFrame");
 kmiFrame:RegisterEvent("ADDON_LOADED");
 kmiFrame:RegisterEvent("PLAYER_LOGOUT");
 kmiFrame:RegisterEvent("PLAYER_ENTERING_WORLD");
 
-kmiFrame.coloredText = "|caa2788e3KMI|r"
-kmiFrame.coloredTextVerbose = "|caa2788e3Keyboard's Minimap Icons|r"
+kmiFrame.coloredText = "|caa2788e3"..L["KMI"].."|r"
+kmiFrame.coloredTextVerbose = "|caa2788e3"..L["KMIVerbose"].."|r"
+
+local function Print(...)
+	local prefix = string.format(kmiFrame.coloredText .. ":");
+	DEFAULT_CHAT_FRAME:AddMessage(string.join(" ", prefix, ...));
+end
 
 StaticPopupDialogs["KMI_ADDON_INCOMPATIBLE"] = {
-	text = kmiFrame.coloredText .. ": You appear to be running an incompatible addon: |caaf5e042Derangement's Minimap Blips|r. This addon is no longer available for updates. Would you like to reload your UI and disable it?",
-	button1 = "Yes",
-	button2 = "No",
+	text = kmiFrame.coloredText .. ": "..L["IncompatibleFound"]..": |caaf5e042"..L["DerangementMinimapBlips"].."|r. "..L["DisableAddon"],
+	button1 = YES,
+	button2 = NO,
 	OnAccept = function()
 		if UnitAffectingCombat("player") == true then
-			print(ERR_NOT_IN_COMBAT);
+			Print(ERR_NOT_IN_COMBAT);
 			return
 		else
-			DisableAddOn("DerangementMinimapBlips")
+			C_AddOns.DisableAddOn("DerangementMinimapBlips")
 			ReloadUI()
 		end
  	end,
@@ -28,81 +71,181 @@ StaticPopupDialogs["KMI_ADDON_INCOMPATIBLE"] = {
 	hideOnEscape = true,
 };
 
-function kmiFrame.eventHandler(self, event, arg1)
-	--Minimap:SetBlipTexture("Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\KeyboardsMinimapIcons");
-	if event == "ADDON_LOADED" and arg1 == "KeyboardsMinimapIcons" then
-		if not KMI_DB or type(KMI_DB) == "table" then 
-			KMI_DB = defaults;
-			Minimap:SetBlipTexture(KMI_DB);
-		else
-			Minimap:SetBlipTexture(KMI_DB);
+function kmiFrame.DateChecker()
+	local CurrentPatch = select(1, GetBuildInfo())
+	local AddonPatch = "11.0.2"
+
+
+	StaticPopupDialogs["KMI_ADDON_OUTOFDATE"] = {
+		text = kmiFrame.coloredTextVerbose .. ": "..L["CurrentVersion"].."(" .. AddonPatch .. ") "..L["NotRecognized"]..L["UpdateTo"].. CurrentPatch,
+		button1 = OKAY,
+		timeout = 0,
+		whileDead = true,
+		hideOnEscape = true,
+	};
+
+	if CurrentPatch == AddonPatch then -- verify this is the current build, because pretty much every major build breaks the addon
+		for k, v in pairs(KMItextures) do
+			if KMI_DB["texture"] == v["textureNum"] then
+				Minimap:SetBlipTexture(v["texture"]);
+			end
 		end
+	else
+		StaticPopup_Show("KMI_ADDON_OUTOFDATE")
+	end
+end
+
+function kmiFrame.SetTexture()
+	if not KMI_DB then 
+		KMI_DB = CopyTable(defaultsTable);
+		kmiFrame.DateChecker()
+	else
+		for k, v in pairs(KMItextures) do
+			if KMI_DB == v["texture"] then
+				Print(L["ConvertingData"])
+				KMI_DB = {}
+				KMI_DB["texture"] = (v["textureNum"])
+			end
+		end
+		kmiFrame.DateChecker()
+	end
+end
+
+function kmiFrame.SetupAddonSettings()
+	local function OnSettingChanged(_, setting, value)
+		local variable = setting:GetVariable()
+
+		if strsub(variable, 1, 3) == "KMI_" then
+			variable = strsub(variable, 4); -- remove our prefix so it matches existing savedvar keys
+		end
+
+		kmiFrame.SetTexture()
+	end
+
+	local category, layout = Settings.RegisterVerticalLayoutCategory(L["KMIVerbose"])
+	--local subcategory, layout2 = Settings.RegisterVerticalLayoutSubcategory(category, "my very own subcategory")
+
+	--layout:AddInitializer(CreateSettingsListSectionHeaderInitializer(string.format(L["Version"], GetAddOnMetadata("DragonRider", "Version"))));
+
+	--layout:AddInitializer(CreateSettingsListSectionHeaderInitializer("Texture Select"));
+
+	local CreateDropdown = Settings.CreateDropdown or Settings.CreateDropDown
+	local CreateCheckbox = Settings.CreateCheckbox or Settings.CreateCheckBox
+
+	local function RegisterSetting(variableKey, defaultValue, name)
+		local uniqueVariable = "KMI_" .. variableKey; -- these have to be unique or calamity ensues, savedvars will be unaffected
+
+		local setting;
+		setting = Settings.RegisterAddOnSetting(category, uniqueVariable, variableKey, KMI_DB, type(defaultValue), name, defaultValue);
+
+		setting:SetValue(KMI_DB[variableKey]);
+		Settings.SetOnValueChangedCallback(uniqueVariable, OnSettingChanged);
+
+		return setting;
+	end
+
+	do
+		local variable = "texture"
+		local defaultValue = 1  -- Corresponds to "Option 1" below.
+		local name = L["MinimapTexture"]
+		local tooltip = L["MinimapTextureTT"]
+
+		local function GetOptions()
+			local container = Settings.CreateControlTextContainer()
+			container:Add(1, L["Default"])
+			container:Add(2, L["NodesAsCircles"])
+			container:Add(3, L["NodesAsCirclesSG"])
+			container:Add(4, L["BlueNodes"])
+			container:Add(5, L["BlueNodesSG"])
+			return container:GetData()
+		end
+
+		local setting = RegisterSetting(variable, defaultValue, name);
+		CreateDropdown(category, setting, GetOptions, tooltip)
+	end
+
+	Settings.RegisterAddOnCategory(category)
+end
+
+function kmiFrame.eventHandler(self, event, arg1)
+	--Minimap:SetBlipTexture(defaultsTable.texture);
+	if event == "ADDON_LOADED" and arg1 == "KeyboardsMinimapIcons" then
+
+		kmiFrame.SetTexture()
+		kmiFrame.SetupAddonSettings()
 	end
 	if event == "PLAYER_ENTERING_WORLD" and C_AddOns.IsAddOnLoaded("DerangementMinimapBlips") == true then
 		StaticPopup_Show("KMI_ADDON_INCOMPATIBLE")
 	end
 	if event == "PLAYER_LOGOUT" then
-		Minimap:SetBlipTexture("Interface\\MINIMAP\\ObjectIconsAtlas");
+		Minimap:SetBlipTexture(GameDefault["texture"]);
 	end
 end
 
 kmiFrame:SetScript("OnEvent",kmiFrame.eventHandler);
 
 
-function kmiFrame:Print(...)
-	local prefix = string.format(kmiFrame.coloredText .. ":");
-	DEFAULT_CHAT_FRAME:AddMessage(string.join(" ", prefix, ...));
-end
 
 kmiFrame.commands = {
-	["enable"] = function()
-		Minimap:SetBlipTexture(KMI_DB);
-		kmiFrame:Print("Enabling " .. kmiFrame.coloredTextVerbose .. ".");
+	[L["enable"]] = function()
+		kmiFrame.SetTexture()
+		Print(L["Enabling"] .. kmiFrame.coloredTextVerbose);
 	end,
 
-	["disable"] = function()
-		Minimap:SetBlipTexture("Interface\\MINIMAP\\ObjectIconsAtlas");
-		kmiFrame:Print("Temporarily Disabling " .. kmiFrame.coloredTextVerbose .. ".")
+	[L["disable"]] = function()
+		Minimap:SetBlipTexture(KMItextures.GameDefault["texture"]);
+		Print(L["TempDisable"] .. kmiFrame.coloredTextVerbose)
 	end,
 
-	["default"] = function()
-		Minimap:SetBlipTexture("Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\KeyboardsMinimapIcons");
-		KMI_DB = "Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\KeyboardsMinimapIcons";
-		kmiFrame:Print("Enabling " .. "|caaf5e042" .. "default" .. "|r" .. " option. This option only includes smaller friendly player/NPC tracking nodes.");
+	[L["default"]] = function()
+		KMI_DB = CopyTable(defaultsTable);
+		kmiFrame.SetTexture()
+		Print(L["Enabling"] .. "|caaf5e042" .. L["default"] .. "|r" .. L["defaultDescript"]);
 	end,
 
-	["circle"] = function(subCommand)
+	[L["circle"]] = function(subCommand)
 		if not subCommand or subCommand == "" then
-			Minimap:SetBlipTexture("Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\NodesAsCircles");
-			KMI_DB = "Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\NodesAsCircles";
-			kmiFrame:Print("Enabling " .. "|caaf5e042" .. "circle" .. "|r" .. " option. This option only includes smaller friendly player/NPC tracking nodes, and blue circles for gathering nodes.");
-		elseif subCommand == "shiny" then
-			Minimap:SetBlipTexture("Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\NodesAsCircles_ShinyG");
-			KMI_DB = "Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\NodesAsCircles_ShinyG";
-			kmiFrame:Print("Enabling " .. "|caaf5e042" .. "circle shiny" .. "|r" .. " option. This option includes smaller friendly player/NPC tracking nodes, blue circles for gathering nodes, and golden shiny icons for special gathering nodes.");
+			KMI_DB["texture"] = KMItextures.NodesAsCircles.textureNum;
+			kmiFrame.SetTexture()
+			Print(L["Enabling"] .. "|caaf5e042" .. L["circle"] .. "|r" .. L["circleDescript"]);
+		elseif subCommand == L["shiny"] then
+			KMI_DB["texture"] = KMItextures.NodesAsCirclesSG.textureNum;
+			kmiFrame.SetTexture()
+			Print(L["Enabling"] .. "|caaf5e042" .. L["circle"] .. " " .. L["shiny"] .. "|r" .. L["circleShinyDescript"] );
 		else
-			kmiFrame:Print("Invalid sub-command for " .. "|caaf5e042" .. "/kmi circle" .. "|r" .. ". Use the " .. "|caaf5e042" .. "/kmi circle shiny" .. "|r" .. " or " .. "|caaf5e042" .. "/kmi circle" .. "|r" .. " commands.");
+			Print(L["InvalidCommand"] .. "|caaf5e042" .. L["slashkmi"].." "..L["circle"] .. "|r" .. L["Use"] .. "|caaf5e042" .. L["slashkmi"].." "..L["circle"] .. " " .. L["shiny"] .. "|r" .. L["or"] .. "|caaf5e042" .. "/"..L["kmi"].." "..L["circle"] .. "|r");
 		end
 	end,
 
-	["blue"] = function(subCommand)
+	[L["blue"]] = function(subCommand)
 		if not subCommand or subCommand == "" then
-			Minimap:SetBlipTexture("Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\BlueNodes");
-			KMI_DB = "Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\BlueNodes";
-			kmiFrame:Print("Enabling " .. "|caaf5e042" .. "blue" .. "|r" .. " option. This option only includes smaller friendly player/NPC tracking nodes, and blue color for gathering nodes.");
-		elseif subCommand == "shiny" then
-			Minimap:SetBlipTexture("Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\BlueNodes_ShinyG");
-			KMI_DB = "Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\BlueNodes_ShinyG";
-			kmiFrame:Print("Enabling " .. "|caaf5e042" .. "blue shiny" .. "|r" .. " option. This option includes smaller friendly player/NPC tracking nodes, blue color for gathering nodes, and golden shiny icons for special gathering nodes.");
+			KMI_DB["texture"] = KMItextures.BlueNodes.textureNum;
+			kmiFrame.SetTexture()
+			Print(L["Enabling"] .. "|caaf5e042" .. L["blue"] .. "|r" .. L["blueDescript"]);
+		elseif subCommand == L["shiny"] then
+			KMI_DB["texture"] = KMItextures.BlueNodesSG.textureNum;
+			kmiFrame.SetTexture()
+			Print(L["Enabling"] .. "|caaf5e042" .. L["blue"] .. " " .. L["shiny"] .. "|r" .. L["blueShinyDescript"]);
 		else
-			kmiFrame:Print("Invalid sub-command for " .. "|caaf5e042" .. "/kmi blue" .. "|r" .. ". Use the " .. "|caaf5e042" .. "/kmi blue shiny" .. "|r" .. " or " .. "|caaf5e042" .. "/kmi blue" .. "|r" .. " commands.");
+			Print(L["InvalidCommand"] .. "|caaf5e042" .. L["slashkmi"].." "..L["blue"] .. "|r" .. L["Use"] .. "|caaf5e042" ..  L["slashkmi"].." "..L["blue"] .. " " .. L["shiny"] .. "|r" .. L["or"] .. "|caaf5e042" .. "/"..L["kmi"].." "..L["blue"] .. "|r");
 		end
 	end,
 
-	["help"] = function()
-		kmiFrame:Print("Thank you for using " .. kmiFrame.coloredTextVerbose .. ". This addon replaces the default minimap icons, particularly for Hunter Tracking as well as coloring gathering nodes blue."..
-			"\nCommands available: " .. "|caaf5e042" .. "/kmi disable" .. "|r" .. " | " .. "|caaf5e042" .. "/kmi enable" .. "|r" .. " | " .. "|caaf5e042" .. "/kmi default" .. "|r" .. " | " .. "|caaf5e042" .. "/kmi circle" .. "|r" .. " | " .. "|caaf5e042" .. "/kmi blue" .. "|r" .. "."..
-			"\nAdditional sub-commands: " .. "|caaf5e042" .. "/kmi circle shiny" .. "|r" .. " | " .. "|caaf5e042" .. "/kmi blue shiny" .. "|r"..".")
+	[L["help"]] = function()
+		local concatenatedString
+		for k, v in pairs(kmiFrame.commands) do
+			if concatenatedString == nil then
+				concatenatedString = "|caaf5e042"..k.."|r"
+			else
+				concatenatedString = concatenatedString .. " | ".. "|caaf5e042"..k.."|r"
+			end
+			
+		end
+		Print(
+			L["ThanksForUsing"] .. kmiFrame.coloredTextVerbose .. L["ThisAddonReplaces"]..
+			"\n"..L["CommandsAvailable"].. " " .. concatenatedString..
+			"\n"..L["AdditionalCommands"].. " |caaf5e042" .. "/"..L["kmi"].." "..L["circle"] .. " " .. L["shiny"] .. "|r" .. " | " .. "|caaf5e042" .. "/"..L["kmi"].." "..L["blue"] .. " " .. L["shiny"] .. "|r".."."
+		)
 	end
 };
 
@@ -143,7 +286,7 @@ end
 
 function kmiFrame:init(event, name)
 	if (name ~= "KeyboardsMinimapIcons") then return end
-	SLASH_KMI1 = "/kmi"
+	SLASH_KMI1 = L["slashkmi"]
 	SlashCmdList.KMI = HandleSlashCommands;
 end
 
