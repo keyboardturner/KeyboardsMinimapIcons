@@ -178,7 +178,7 @@ function kmiFrame.eventHandler(self, event, arg1)
 		StaticPopup_Show("KMI_ADDON_INCOMPATIBLE")
 	end
 	if event == "PLAYER_LOGOUT" then
-		Minimap:SetBlipTexture(GameDefault["texture"]);
+		Minimap:SetBlipTexture(KMItextures.GameDefault["texture"]);
 	end
 end
 

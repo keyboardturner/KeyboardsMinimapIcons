@@ -1,3 +1,7 @@
+# 0.2.9
+
+Fix to logout revert event
+
 # 0.2.8
 
 Texture fix for 11.0.2
