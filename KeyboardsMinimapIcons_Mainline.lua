@@ -54,7 +54,7 @@ local function Print(...)
 end
 
 StaticPopupDialogs["KMI_ADDON_INCOMPATIBLE"] = {
-	text = kmiFrame.coloredText .. ": "..L["IncompatibleFound"]..": |caaf5e042"..L["DerangementMinimapBlips"].."|r. "..L["DisableAddon"],
+	text = string.format("|caaf5e042"..L["DerangementMinimapBlips"].."|r",kmiFrame.coloredText .. ": "..L["IncompatibleFound"]),
 	button1 = YES,
 	button2 = NO,
 	OnAccept = function()
@@ -65,7 +65,7 @@ StaticPopupDialogs["KMI_ADDON_INCOMPATIBLE"] = {
 			C_AddOns.DisableAddOn("DerangementMinimapBlips")
 			ReloadUI()
 		end
- 	end,
+	end,
 	timeout = 0,
 	whileDead = true,
 	hideOnEscape = true,
@@ -77,7 +77,7 @@ function kmiFrame.DateChecker()
 
 
 	StaticPopupDialogs["KMI_ADDON_OUTOFDATE"] = {
-		text = kmiFrame.coloredTextVerbose .. ": "..L["CurrentVersion"].."(" .. AddonPatch .. ") "..L["NotRecognized"]..L["UpdateTo"].. CurrentPatch,
+		text = kmiFrame.coloredTextVerbose .. ": "..L["CurrentVersion"].." (" .. AddonPatch .. ") "..L["NotRecognized"]..L["UpdateTo"].. CurrentPatch,
 		button1 = OKAY,
 		timeout = 0,
 		whileDead = true,
@@ -122,7 +122,8 @@ function kmiFrame.SetupAddonSettings()
 		kmiFrame.SetTexture()
 	end
 
-	local category, layout = Settings.RegisterVerticalLayoutCategory(L["KMIVerbose"])
+	local addonName = C_AddOns.GetAddOnMetadata("KeyboardsMinimapIcons", "Title")
+	kmiFrame.category, kmiFrame.layout = Settings.RegisterVerticalLayoutCategory(addonName)
 	--local subcategory, layout2 = Settings.RegisterVerticalLayoutSubcategory(category, "my very own subcategory")
 
 	--layout:AddInitializer(CreateSettingsListSectionHeaderInitializer(string.format(L["Version"], GetAddOnMetadata("DragonRider", "Version"))));
@@ -136,7 +137,7 @@ function kmiFrame.SetupAddonSettings()
 		local uniqueVariable = "KMI_" .. variableKey; -- these have to be unique or calamity ensues, savedvars will be unaffected
 
 		local setting;
-		setting = Settings.RegisterAddOnSetting(category, uniqueVariable, variableKey, KMI_DB, type(defaultValue), name, defaultValue);
+		setting = Settings.RegisterAddOnSetting(kmiFrame.category, uniqueVariable, variableKey, KMI_DB, type(defaultValue), name, defaultValue);
 
 		setting:SetValue(KMI_DB[variableKey]);
 		Settings.SetOnValueChangedCallback(uniqueVariable, OnSettingChanged);
@@ -152,19 +153,19 @@ function kmiFrame.SetupAddonSettings()
 
 		local function GetOptions()
 			local container = Settings.CreateControlTextContainer()
-			container:Add(1, L["Default"])
-			container:Add(2, L["NodesAsCircles"])
-			container:Add(3, L["NodesAsCirclesSG"])
-			container:Add(4, L["BlueNodes"])
-			container:Add(5, L["BlueNodesSG"])
+			container:Add(1, L["Default"], L["defaultDescript"])
+			container:Add(2, L["NodesAsCircles"], L["circleDescript"])
+			container:Add(3, L["NodesAsCirclesSG"], L["circleShinyDescript"])
+			container:Add(4, L["BlueNodes"], L["blueDescript"])
+			container:Add(5, L["BlueNodesSG"], L["blueShinyDescript"])
 			return container:GetData()
 		end
 
 		local setting = RegisterSetting(variable, defaultValue, name);
-		CreateDropdown(category, setting, GetOptions, tooltip)
+		CreateDropdown(kmiFrame.category, setting, GetOptions, tooltip)
 	end
 
-	Settings.RegisterAddOnCategory(category)
+	Settings.RegisterAddOnCategory(kmiFrame.category)
 end
 
 function kmiFrame.eventHandler(self, event, arg1)
@@ -200,20 +201,21 @@ kmiFrame.commands = {
 	[L["default"]] = function()
 		KMI_DB = CopyTable(defaultsTable);
 		kmiFrame.SetTexture()
-		Print(L["Enabling"] .. "|caaf5e042" .. L["default"] .. "|r" .. L["defaultDescript"]);
+		Print(L["Enabled"] .. " |caaf5e042" .. L["default"] .. "|r" .. " - " .. L["defaultDescript"]);
 	end,
 
 	[L["circle"]] = function(subCommand)
 		if not subCommand or subCommand == "" then
 			KMI_DB["texture"] = KMItextures.NodesAsCircles.textureNum;
 			kmiFrame.SetTexture()
-			Print(L["Enabling"] .. "|caaf5e042" .. L["circle"] .. "|r" .. L["circleDescript"]);
+			Print(L["Enabled"] .. " |caaf5e042" .. L["circle"] .. "|r" .. " - " .. L["circleShinyDescript"]);
 		elseif subCommand == L["shiny"] then
 			KMI_DB["texture"] = KMItextures.NodesAsCirclesSG.textureNum;
 			kmiFrame.SetTexture()
-			Print(L["Enabling"] .. "|caaf5e042" .. L["circle"] .. " " .. L["shiny"] .. "|r" .. L["circleShinyDescript"] );
+			Print(L["Enabled"] .. " |caaf5e042" .. L["circle"] .. " " .. L["shiny"] .. "|r" .. " - " .. L["circleShinyDescript"]);
 		else
-			Print(L["InvalidCommand"] .. "|caaf5e042" .. L["slashkmi"].." "..L["circle"] .. "|r" .. L["Use"] .. "|caaf5e042" .. L["slashkmi"].." "..L["circle"] .. " " .. L["shiny"] .. "|r" .. L["or"] .. "|caaf5e042" .. "/"..L["kmi"].." "..L["circle"] .. "|r");
+
+			Print(L["InvalidCommand"].. "|caaf5e042" .. L["slashkmi"].." "..L["circle"] .. "|r".. " | " .. "|caaf5e042" .. L["slashkmi"].." "..L["circle"] .. " " .. L["shiny"] .. "|r");
 		end
 	end,
 
@@ -221,13 +223,13 @@ kmiFrame.commands = {
 		if not subCommand or subCommand == "" then
 			KMI_DB["texture"] = KMItextures.BlueNodes.textureNum;
 			kmiFrame.SetTexture()
-			Print(L["Enabling"] .. "|caaf5e042" .. L["blue"] .. "|r" .. L["blueDescript"]);
+			Print(L["Enabled"] .. " |caaf5e042" .. L["blue"] .. "|r" .. " - " .. L["blueDescript"]);
 		elseif subCommand == L["shiny"] then
 			KMI_DB["texture"] = KMItextures.BlueNodesSG.textureNum;
 			kmiFrame.SetTexture()
-			Print(L["Enabling"] .. "|caaf5e042" .. L["blue"] .. " " .. L["shiny"] .. "|r" .. L["blueShinyDescript"]);
+			Print(L["Enabled"] .. " |caaf5e042" .. L["blue"] .. " " .. L["shiny"] .. "|r" .. " - " .. L["blueShinyDescript"]);
 		else
-			Print(L["InvalidCommand"] .. "|caaf5e042" .. L["slashkmi"].." "..L["blue"] .. "|r" .. L["Use"] .. "|caaf5e042" ..  L["slashkmi"].." "..L["blue"] .. " " .. L["shiny"] .. "|r" .. L["or"] .. "|caaf5e042" .. "/"..L["kmi"].." "..L["blue"] .. "|r");
+			Print(L["InvalidCommand"].. "|caaf5e042" .. L["slashkmi"].." "..L["blue"] .. "|r".. " | " .. "|caaf5e042" .. L["slashkmi"].." "..L["blue"] .. " " .. L["shiny"] .. "|r");
 		end
 	end,
 
@@ -241,11 +243,12 @@ kmiFrame.commands = {
 			end
 			
 		end
+		local intro = string.format(L["ThanksForUsing"], kmiFrame.coloredTextVerbose)
 		Print(
-			L["ThanksForUsing"] .. kmiFrame.coloredTextVerbose .. L["ThisAddonReplaces"]..
+			intro..
 			"\n"..L["CommandsAvailable"].. " " .. concatenatedString..
-			"\n"..L["AdditionalCommands"].. " |caaf5e042" .. "/"..L["kmi"].." "..L["circle"] .. " " .. L["shiny"] .. "|r" .. " | " .. "|caaf5e042" .. "/"..L["kmi"].." "..L["blue"] .. " " .. L["shiny"] .. "|r".."."
-		)
+			"\n"..L["AdditionalCommands"].. " |caaf5e042" .. L["slashkmi"].." "..L["circle"] .. " " .. L["shiny"] .. "|r" .. " | " .. "|caaf5e042" .. L["slashkmi"].." "..L["blue"] .. " " .. L["shiny"] .. "|r"
+		);
 	end
 };
 
@@ -257,9 +260,9 @@ local function HandleSlashCommands(str)
 
 		local args = {};
 		for _dummy, arg in ipairs({ string.split(' ', str) }) do
-		if (#arg > 0) then
-			table.insert(args, arg);
-			end
+			if (#arg > 0) then
+				table.insert(args, arg);
+				end
 			end
 
 			local path = kmiFrame.commands; -- required for updating found table.
@@ -286,7 +289,7 @@ end
 
 function kmiFrame:init(event, name)
 	if (name ~= "KeyboardsMinimapIcons") then return end
-	SLASH_KMI1 = L["slashkmi"]
+	SLASH_KMI1 = L["slashkmi"];
 	SlashCmdList.KMI = HandleSlashCommands;
 end
 
