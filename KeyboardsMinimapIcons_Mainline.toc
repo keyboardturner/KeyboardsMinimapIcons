@@ -1,4 +1,4 @@
-## Interface: 110002
+## Interface: 110005
 ## Title: Keyboard's Minimap Icons
 ## Author: Keyboardturner
 ## Version: @project-version@
