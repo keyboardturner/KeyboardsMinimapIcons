@@ -73,7 +73,7 @@ StaticPopupDialogs["KMI_ADDON_INCOMPATIBLE"] = {
 
 function kmiFrame.DateChecker()
 	local CurrentPatch = select(1, GetBuildInfo())
-	local AddonPatch = "11.0.2"
+	local AddonPatch = "11.0.5"
 
 
 	StaticPopupDialogs["KMI_ADDON_OUTOFDATE"] = {
