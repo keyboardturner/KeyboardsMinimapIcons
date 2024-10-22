@@ -2,6 +2,8 @@
 
 Added settings panel dropdown option, reworked some slash commands, added localized slash cmds, added patch version checker to auto-disable when not updated (as every patch is incompatible)
 
+ptBR local by [kalazshar](https://github.com/kalazshar/kalazshar/blob/main/PT-BR%20for%20KeyboardTurner)
+
 # 0.2.9
 
 Fix to logout revert event
