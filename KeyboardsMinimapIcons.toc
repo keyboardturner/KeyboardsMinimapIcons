@@ -34,4 +34,4 @@
 ## X-Wago-ID: RXKq8b6y
 
 Localization.lua
-KeyboardsMinimapIcons_Mainline.lua
+KeyboardsMinimapIcons.lua
