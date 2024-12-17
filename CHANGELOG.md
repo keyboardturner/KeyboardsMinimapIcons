@@ -1,3 +1,7 @@
+# 0.3.1
+
+11.0.7 toc update (apparently there's no update to ObjectIconsAtlas this time around?)
+
 # 0.3.0
 
 Added settings panel dropdown option, reworked some slash commands, added localized slash cmds, added patch version checker to auto-disable when not updated (as every patch is incompatible)
