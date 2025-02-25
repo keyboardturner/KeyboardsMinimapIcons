@@ -1,3 +1,7 @@
+# 0.3.2
+
+11.1.0 update
+
 # 0.3.1
 
 11.0.7 toc update (apparently there's no update to ObjectIconsAtlas this time around?)
