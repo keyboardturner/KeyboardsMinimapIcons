@@ -29,6 +29,18 @@
 ## Title-zhTW: 鍵盤的迷你地圖圖示
 ## Notes-zhTW: 更好的小地圖圖標。使用"/鍵圖"查看選項。
 
+## Category-enUS: Map
+## Category-deDE: Karte
+## Category-esES: Mapa
+## Category-esMX: Mapa
+## Category-frFR: Carte
+## Category-itIT: Mappa
+## Category-koKR: 지도
+## Category-ptBR: Mapa
+## Category-ruRU: Карта
+## Category-zhCN: 地图
+## Category-zhTW: 地圖
+
 ## X-Curse-Project-ID: 420725
 ## X-WoWI-ID: 25911
 ## X-Wago-ID: RXKq8b6y
