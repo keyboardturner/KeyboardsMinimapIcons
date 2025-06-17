@@ -1,3 +1,7 @@
+# 0.3.5
+
+fix issue with 11.1.7 still showing 11.1.5 mismatch
+
 # 0.3.4
 
 11.1.7 toc update
