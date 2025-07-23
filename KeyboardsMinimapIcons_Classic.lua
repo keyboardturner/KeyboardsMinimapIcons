@@ -1,6 +1,6 @@
 local _dummy, kmiFrame = ...; -- handles slash commands
 
-local defaults = "Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\KeyboardsMinimapIcons_Wrath"
+local defaults = 1
 
 local kmiFrame = CreateFrame("Frame", "KeyboardsMinimapIconsFrame");
 kmiFrame:RegisterEvent("ADDON_LOADED");
@@ -28,14 +28,29 @@ StaticPopupDialogs["KMI_ADDON_INCOMPATIBLE"] = {
 	hideOnEscape = true,
 };
 
+function kmiFrame.SetBlipTexture()
+	if KMI_DB then
+		if KMI_DB == 1 then
+			Minimap:SetBlipTexture("Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\KeyboardsMinimapIcons_Classic");
+		end
+	end
+end
+
 function kmiFrame.eventHandler(self, event, arg1)
-	--Minimap:SetBlipTexture("Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\KeyboardsMinimapIcons");
 	if event == "ADDON_LOADED" and arg1 == "KeyboardsMinimapIcons" then
 		if not KMI_DB or type(KMI_DB) == "table" then 
 			KMI_DB = defaults;
-			Minimap:SetBlipTexture(KMI_DB);
+			kmiFrame.SetBlipTexture()
 		else
-			Minimap:SetBlipTexture(KMI_DB);
+			kmiFrame.SetBlipTexture()
+		end
+
+		if KMI_DB == "Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\KeyboardsMinimapIcons_Vanilla" or
+			KMI_DB == "Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\KeyboardsMinimapIcons_TBC" or
+			KMI_DB == "Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\KeyboardsMinimapIcons_Wrath" or
+			KMI_DB == "Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\KeyboardsMinimapIcons_Cata" or
+			KMI_DB == "Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\KeyboardsMinimapIcons_Mists" then
+				KMI_DB = 1
 		end
 	end
 	if event == "PLAYER_ENTERING_WORLD" and IsAddOnLoaded("DerangementMinimapBlips") == true then
@@ -56,7 +71,7 @@ end
 
 kmiFrame.commands = {
 	["enable"] = function()
-		Minimap:SetBlipTexture(KMI_DB);
+		kmiFrame.SetBlipTexture()
 		kmiFrame:Print("Enabling " .. kmiFrame.coloredTextVerbose .. ".");
 	end,
 
@@ -66,8 +81,8 @@ kmiFrame.commands = {
 	end,
 
 	["default"] = function()
-		Minimap:SetBlipTexture("Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\KeyboardsMinimapIcons_Wrath");
-		KMI_DB = "Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\KeyboardsMinimapIcons_Wrath";
+		KMI_DB = 1;
+		kmiFrame.SetBlipTexture()
 		kmiFrame:Print("Enabling " .. "|caaf5e042" .. "default" .. "|r" .. " option.");
 	end,
 

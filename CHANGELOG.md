@@ -1,3 +1,7 @@
+# 0.3.6
+
+Fixed issues with Classic variants incorrectly defaulting to the Retail install of the addon.
+
 # 0.3.5
 
 fix issue with 11.1.7 still showing 11.1.5 mismatch
