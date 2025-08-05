@@ -1,3 +1,7 @@
+# 0.3.7
+
+11.2.0 update
+
 # 0.3.6
 
 Fixed issues with Classic variants incorrectly defaulting to the Retail install of the addon.
