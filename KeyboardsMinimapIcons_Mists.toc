@@ -1,4 +1,4 @@
-## Interface: 50501
+## Interface: 50502
 ## Title: Keyboard's Minimap Icons
 ## Author: Keyboardturner
 ## Version: @project-version@
