@@ -1,6 +1,6 @@
 # 0.4.4
 
-Addon is officially retired.
+Addon is officially retired for specifically Retail (Midnight).
 
 Blizzard has removed the `Minimap:SetBlipTexture` API, which this addon relied upon. As a result, Keyboard's Minimap Icons can no longer function and is being officially retired.
 
