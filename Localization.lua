@@ -49,6 +49,7 @@ if LOCALE == "enUS" then
 	L["Enabling"] = "Enabling " -- includes space
 	L["TempDisable"] = "Temporarily disabling " -- includes space
 	L["help"] = "help"
+	L["AddonIsRetired"] = "Blizzard has removed the Minimap:SetBlipTexture API, which this addon relied upon. As a result, %s can no longer function and is being officially retired.\n\nThank you for using it!"
 
 return end
 
@@ -90,6 +91,7 @@ if LOCALE == "esES" or LOCALE == "esMX" then
 	L["Enabling"] = "Habilitando "
 	L["TempDisable"] = "Deshabilitando temporalmente "
 	L["help"] = "ayuda"
+	L["AddonIsRetired"] = "Blizzard eliminó la API Minimap:SetBlipTexture, de la cual dependía este addon. Como resultado, %s ya no puede funcionar y queda retirado oficialmente.\n\n¡Gracias por usarlo!"
 
 return end
 
@@ -131,6 +133,7 @@ if LOCALE == "deDE" then
 	L["Enabling"] = "Aktiviere "
 	L["TempDisable"] = "Vorübergehendes Deaktivieren von "
 	L["help"] = "hilfe"
+	L["AddonIsRetired"] = "Blizzard hat die API Minimap:SetBlipTexture entfernt, auf die dieses Addon angewiesen war. Dadurch kann %s nicht mehr funktionieren und wird offiziell eingestellt.\n\nVielen Dank, dass du es verwendet hast!"
 
 return end
 
@@ -172,6 +175,7 @@ if LOCALE == "frFR" then
 	L["Enabling"] = "Activation de "
 	L["TempDisable"] = "Désactivation temporaire de "
 	L["help"] = "aide"
+	L["AddonIsRetired"] = "Blizzard a supprimé l'API Minimap:SetBlipTexture, sur laquelle reposait cet addon. Par conséquent, %s ne peut plus fonctionner et est officiellement abandonné.\n\nMerci de l'avoir utilisé !"
 
 return end
 
@@ -213,6 +217,7 @@ if LOCALE == "itIT" then
 	L["Enabling"] = "Abilitando "
 	L["TempDisable"] = "Disabilitando temporaneamente "
 	L["help"] = "aiuto"
+	L["AddonIsRetired"] = "Blizzard ha rimosso l'API Minimap:SetBlipTexture, sulla quale si basava questo addon. Di conseguenza, %s non può più funzionare ed è ufficialmente ritirato.\n\nGrazie per averlo utilizzato!"
 
 return end
 
@@ -255,6 +260,7 @@ if LOCALE == "ptBR" then
 	L["TempDisable"] = "Desativando temporariamente "
 	L["help"] = "ajuda"
 	-- official translation by kalazshar (https://github.com/kalazshar/kalazshar/blob/main/PT-BR%20for%20KeyboardTurner)
+	L["AddonIsRetired"] = "A Blizzard removeu a API Minimap:SetBlipTexture, da qual este addon dependia. Como resultado, %s não pode mais funcionar e está oficialmente descontinuado.\n\nObrigado por usá-lo!"
 
 -- Note that the EU Portuguese WoW client also
 -- uses the Brazilian Portuguese locale code.
@@ -298,6 +304,7 @@ if LOCALE == "ruRU" then
 	L["Enabling"] = "Включение "
 	L["TempDisable"] = "Временное отключение "
 	L["help"] = "помощь"
+	L["AddonIsRetired"] = "Blizzard удалила API Minimap:SetBlipTexture, на котором основывалась работа этого аддона. В результате %s больше не может работать и официально прекращает своё существование.\n\nСпасибо, что пользовались им!"
 
 return end
 
@@ -339,6 +346,7 @@ if LOCALE == "koKR" then
 	L["Enabling"] = "활성화 중 "
 	L["TempDisable"] = "임시 비활성화 중 "
 	L["help"] = "도움말"
+	L["AddonIsRetired"] = "Blizzard에서 이 애드온이 의존하던 Minimap:SetBlipTexture API를 제거했습니다. 그 결과 %s는 더 이상 작동할 수 없으며 공식적으로 지원이 종료됩니다.\n\n그동안 사용해 주셔서 감사합니다!"
 
 return end
 
@@ -380,6 +388,7 @@ if LOCALE == "zhCN" then
 	L["Enabling"] = "启用 " -- includes space
 	L["TempDisable"] = "暂时禁用 " -- includes space
 	L["help"] = "帮助"
+	L["AddonIsRetired"] = "暴雪已移除本插件所依赖的 Minimap:SetBlipTexture API。因此，%s 已无法继续运行，并正式停止维护。\n\n感谢你的使用！"
 
 return end
 
@@ -421,5 +430,6 @@ if LOCALE == "zhTW" then
 	L["Enabling"] = "啟用 " -- includes space
 	L["TempDisable"] = "暫時禁用 " -- includes space
 	L["help"] = "幫助"
+	L["AddonIsRetired"] = "暴雪已移除此插件所依賴的 Minimap:SetBlipTexture API。因此，%s 已無法繼續運作，並正式停止維護。\n\n感謝您的使用！"
 
 return end
