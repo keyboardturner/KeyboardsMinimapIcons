@@ -49,7 +49,7 @@ function kmiFrame.eventHandler(self, event, arg1)
 				KMI_DB = 1
 		end
 	end
-	if event == "PLAYER_ENTERING_WORLD" and IsAddOnLoaded("DerangementMinimapBlips") == true then
+	if event == "PLAYER_ENTERING_WORLD" and C_AddOns.IsAddOnLoaded("DerangementMinimapBlips") == true then
 		StaticPopup_Show("KMI_ADDON_INCOMPATIBLE")
 	end
 	if event == "PLAYER_LOGOUT" then
