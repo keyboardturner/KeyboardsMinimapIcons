@@ -45,7 +45,8 @@ function kmiFrame.eventHandler(self, event, arg1)
 		if KMI_DB == "Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\KeyboardsMinimapIcons_Vanilla" or
 			KMI_DB == "Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\KeyboardsMinimapIcons_TBC" or
 			KMI_DB == "Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\KeyboardsMinimapIcons_Wrath" or
-			KMI_DB == "Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\KeyboardsMinimapIcons_Cata" then
+			KMI_DB == "Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\KeyboardsMinimapIcons_Cata" or
+			KMI_DB == "Interface\\AddOns\\KeyboardsMinimapIcons\\tex\\KeyboardsMinimapIcons_Mists" then
 				KMI_DB = 1
 		end
 	end
